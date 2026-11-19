@@ -1,0 +1,5 @@
+# Para relatar uma falha de segurança neste site.
+# Não use este contato para emergências: ligue 190 (Brigada Militar) ou 193 (Bombeiros).
+Contact: mailto:ciosp@bage.rs.gov.br
+Expires: 2027-11-19T23:59:59-03:00
+Preferred-Languages: pt-BR, en

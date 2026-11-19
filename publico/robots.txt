@@ -1,0 +1,6 @@
+# HOMOLOGAÇÃO: bloqueia buscadores enquanto o site tem campos a preencher.
+# No lançamento, troque as duas linhas abaixo por:
+#   User-agent: *
+#   Allow: /
+User-agent: *
+Disallow: /
