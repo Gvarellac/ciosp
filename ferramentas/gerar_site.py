@@ -243,16 +243,21 @@ INST_TEXTO = {
 }
 
 
+CURTO = {"prefeitura-bage": "Prefeitura de Bagé", "ggi-m": "GGI-M", "seguranca-viaria": "Segurança Viária",
+         "bombeiros-rs": "Corpo de Bombeiros", "mprs": "MPRS"}
+
+
 def janela(a, n):
     quem, integra = INST_TEXTO[a]
+    curto = CURTO.get(a, n)
     return (f'<li><button class="inst" type="button" popovertarget="inst-{a}">'
             f'<img src="assets/img/instituicoes/{a}.webp" width="120" height="120" alt="" loading="lazy">'
-            f'<span>{n}</span><span class="sr-only">: saiba mais</span></button>'
+            f'<span>{curto}</span><span class="sr-only">: {n}, saiba mais</span></button>'
             f'<div class="inst-pop" id="inst-{a}" popover role="dialog" aria-labelledby="inst-{a}-t">'
             f'<button class="inst-pop__fechar" type="button" popovertarget="inst-{a}" popovertargetaction="hide">'
             f'<span aria-hidden="true">×</span><span class="sr-only">Fechar</span></button>'
-            f'<div class="inst-pop__topo"><img src="assets/img/instituicoes/{a}.webp" width="96" height="96" alt="" loading="lazy">'
-            f'<h3 id="inst-{a}-t">{n}</h3></div>'
+            f'<img class="inst-pop__logo" src="assets/img/instituicoes/{a}.webp" width="140" height="140" alt="" loading="lazy">'
+            f'<h3 id="inst-{a}-t">{n}</h3><span class="inst-pop__filete" aria-hidden="true"></span>'
             f'<p>{quem}</p>'
             f'<h4>Na integração do CIOSP</h4><p>{integra}</p>'
             f'</div></li>')
