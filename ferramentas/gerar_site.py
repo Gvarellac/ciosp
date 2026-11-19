@@ -210,9 +210,55 @@ INST = [("prefeitura-bage", "Prefeitura Municipal de Bagé"), ("ggi-m", "Gabinet
         ("brigada-militar", "Brigada Militar"), ("policia-penal-rs", "Polícia Penal RS"),
         ("bombeiros-rs", "Corpo de Bombeiros Militar"), ("defesa-civil", "Defesa Civil"),
         ("samu-192", "SAMU 192"), ("mprs", "Ministério Público do RS")]
-mosaico = "\n".join(
-    f'<li><img src="assets/img/instituicoes/{a}.webp" width="120" height="120" alt="{n}" loading="lazy"><span aria-hidden="true">{n}</span></li>'
-    for a, n in INST)
+# Texto de cada janela: (quem é, papel na integração). Validar com cada instituição antes do lançamento.
+INST_TEXTO = {
+    "prefeitura-bage": ("Bagé, fundada em 1811, é a responsável pelo CIOSP por meio da Secretaria de Segurança e Mobilidade Urbana.",
+                        "Coordena o centro, oferece a estrutura de videomonitoramento e aproxima as instituições para que trabalhem juntas em favor da população."),
+    "ggi-m": ("O Gabinete de Gestão Integrada Municipal é o espaço onde os órgãos de segurança de Bagé se reúnem para planejar ações conjuntas.",
+              "É no GGI-M que as prioridades são definidas em conjunto e transformadas em ações coordenadas no CIOSP."),
+    "guarda-civil-municipal": ("Força de segurança do município, regida pelo Estatuto Geral das Guardas Municipais (Lei nº 13.022/2014). Protege bens, serviços e espaços públicos e faz patrulhamento preventivo.",
+                               "Acompanha as imagens do centro e chega rápido aos locais onde a presença preventiva faz diferença. Atendimento pelo 153."),
+    "seguranca-viaria": ("Os Agentes de Trânsito e Transportes fiscalizam, organizam e educam para o trânsito no município, conforme o Código de Trânsito Brasileiro.",
+                         "Usa o monitoramento para agir em acidentes, bloqueios e grandes eventos, deixando o trânsito mais seguro e fluido. Atendimento pelo 118."),
+    "consepro-bage": ("O Conselho Comunitário Pró-Segurança Pública é uma entidade da sociedade civil que apoia as forças de segurança e aproxima a comunidade do tema.",
+                      "Leva ao CIOSP a voz dos moradores e ajuda a fortalecer a parceria entre a população e as instituições."),
+    "policia-federal": ("Polícia judiciária da União, responsável por investigar crimes federais e atuar no controle de fronteiras e imigração.",
+                        "Soma conhecimento e informações às ações integradas, em especial nas questões ligadas à fronteira e aos crimes federais."),
+    "policia-rodoviaria-federal": ("Responsável pelo patrulhamento e pela fiscalização das rodovias federais.",
+                                   "Integra as informações das rodovias que cortam o município às ações do centro."),
+    "policia-civil-rs": ("Polícia judiciária do Estado: registra ocorrências, investiga crimes e conduz os inquéritos policiais.",
+                         "Informações e imagens obtidas de forma integrada ajudam a esclarecer crimes com mais agilidade."),
+    "brigada-militar": ("Polícia militar do Rio Grande do Sul, criada em 1837, responsável pelo policiamento ostensivo e pela preservação da ordem pública.",
+                        "Recebe apoio do monitoramento para orientar o policiamento e agilizar o atendimento das ocorrências. Emergência: 190."),
+    "policia-penal-rs": ("Responsável pela segurança dos estabelecimentos prisionais do Estado.",
+                         "Compartilha informações que contribuem para a prevenção de crimes e para a segurança de toda a comunidade."),
+    "bombeiros-rs": ("O Corpo de Bombeiros Militar atua na prevenção e no combate a incêndios, em salvamentos e no atendimento a emergências.",
+                     "As imagens e a comunicação integrada ajudam a localizar ocorrências e a planejar a resposta. Emergência: 193."),
+    "defesa-civil": ("Atua na prevenção, na preparação e na resposta a desastres, conforme o Sistema Nacional de Proteção e Defesa Civil (Lei nº 12.608/2012).",
+                     "Acompanha situações de risco, como temporais e cheias, e emite alertas à população com apoio do centro. Atendimento pelo 199."),
+    "samu-192": ("O Serviço de Atendimento Móvel de Urgência presta atendimento pré-hospitalar pelo SUS, acionado gratuitamente pelo 192.",
+                 "A integração com as demais forças agiliza o socorro às vítimas e o acesso aos locais de atendimento."),
+    "mprs": ("O Ministério Público do Rio Grande do Sul defende a ordem jurídica, o regime democrático e os interesses da sociedade, e exerce o controle externo da atividade policial.",
+             "Acompanha a atuação integrada, contribuindo para que ela respeite a lei, a privacidade e os direitos de todos."),
+}
+
+
+def janela(a, n):
+    quem, integra = INST_TEXTO[a]
+    return (f'<li><button class="inst" type="button" popovertarget="inst-{a}">'
+            f'<img src="assets/img/instituicoes/{a}.webp" width="120" height="120" alt="" loading="lazy">'
+            f'<span>{n}</span><span class="sr-only">: saiba mais</span></button>'
+            f'<div class="inst-pop" id="inst-{a}" popover role="dialog" aria-labelledby="inst-{a}-t">'
+            f'<button class="inst-pop__fechar" type="button" popovertarget="inst-{a}" popovertargetaction="hide">'
+            f'<span aria-hidden="true">×</span><span class="sr-only">Fechar</span></button>'
+            f'<div class="inst-pop__topo"><img src="assets/img/instituicoes/{a}.webp" width="96" height="96" alt="" loading="lazy">'
+            f'<h3 id="inst-{a}-t">{n}</h3></div>'
+            f'<p>{quem}</p>'
+            f'<h4>Na integração do CIOSP</h4><p>{integra}</p>'
+            f'</div></li>')
+
+
+mosaico = "\n".join(janela(a, n) for a, n in INST)
 PILARES = [("Videomonitoramento urbano", "Câmeras em pontos estratégicos para proteger os espaços públicos."),
            ("Cercamento eletrônico", "Apoio ao acompanhamento de veículos e à segurança viária."),
            ("Análise de informações", "Dados compartilhados para apoiar decisões e prevenção."),
@@ -241,6 +287,7 @@ OCIOSP = f'''<section class="heroi heroi--interna" aria-labelledby="titulo-ciosp
 
 <section class="container secao secao--ultima" aria-labelledby="titulo-instituicoes">
 <div class="titulo-secao"><h2 id="titulo-instituicoes">Instituições integradas</h2></div>
+<p class="mosaico__dica">Toque em uma instituição para conhecer o seu papel na integração.</p>
 <ul class="mosaico">
 {mosaico}
 </ul>
