@@ -68,6 +68,7 @@ Use o `Dockerfile` da raiz do pacote. O site responde na porta **8080**. O HTTPS
 ## Manutenção
 
 - **Atualizar textos:** edite os arquivos `.html` em `publico/`. Não use atributos `style="..."` nem `<script>`, porque a política de segurança vai bloqueá-los. Todo visual fica em `publico/assets/css/site.css`.
+- **Cache dos navegadores:** estilos e imagens ficam 30 dias guardados no navegador do visitante. Por isso o endereço do CSS e das logos leva uma versão (`site.css?v=...`). Depois de mudar o CSS ou uma logo, rode o gerador abaixo. Se editar o HTML à mão, troque o valor depois de `?v=` por outro qualquer, senão os visitantes continuam vendo o visual antigo.
 - **Alternativa:** os textos também estão em `ferramentas/gerar_site.py`. Depois de editar, rode `python3 ferramentas/gerar_site.py` para regerar as páginas.
 - **Fotos de notícias:** use formato WebP ou JPG, com até 1600 px de largura. Não mostre rostos de presos, vítimas, crianças ou adolescentes, placas de veículos, telas de monitoramento nem posição de câmeras (Manual da marca, prancha 14).
 - **Se um dia houver painel com login**, isso muda o nível de risco: será preciso autenticação em dois fatores, atualizações frequentes e revisão da política de segurança.

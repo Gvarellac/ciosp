@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Gera as páginas estáticas do site do CIOSP Bagé (sem JavaScript, sem estilos em linha)."""
-import sys, pathlib
+import sys, pathlib, hashlib
 
 R = pathlib.Path(sys.argv[1]) if len(sys.argv) > 1 else pathlib.Path(__file__).resolve().parent.parent / "publico"
 
@@ -12,6 +12,11 @@ RADAR = '''<svg class="heroi__radar" viewBox="0 0 1200 620" aria-hidden="true" f
 
 MENU = [("index.html", "Início"), ("o-ciosp.html", "O CIOSP"), ("observatorio.html", "Observatório"),
         ("index.html#noticias", "Notícias"), ("index.html#orientacoes", "Orientações"), ("#contato", "Contato")]
+
+
+def versao(caminho):
+    """Impressão digital do arquivo: muda a cada alteração e obriga o navegador a baixar a versão nova."""
+    return hashlib.sha256((R / caminho).read_bytes()).hexdigest()[:10]
 
 
 def pagina(arquivo, titulo, descricao, atual, corpo):
@@ -37,7 +42,7 @@ def pagina(arquivo, titulo, descricao, atual, corpo):
 <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
 <link rel="preload" href="assets/fonts/barlow-condensed-700.woff" as="font" type="font/woff" crossorigin>
 <link rel="preload" href="assets/fonts/inter-400.woff" as="font" type="font/woff" crossorigin>
-<link rel="stylesheet" href="assets/css/site.css">
+<link rel="stylesheet" href="assets/css/site.css?v={versao("assets/css/site.css")}">
 </head>
 <body>
 <a class="pular" href="#conteudo">Pular para o conteúdo</a>
@@ -251,12 +256,12 @@ def janela(a, n):
     quem, integra = INST_TEXTO[a]
     curto = CURTO.get(a, n)
     return (f'<li><button class="inst" type="button" popovertarget="inst-{a}">'
-            f'<img src="assets/img/instituicoes/{a}.webp" width="120" height="120" alt="" loading="lazy">'
+            f'<img src="assets/img/instituicoes/{a}.webp?v={versao(f'assets/img/instituicoes/{a}.webp')}" width="120" height="120" alt="" loading="lazy">'
             f'<span>{curto}</span><span class="sr-only">: {n}, saiba mais</span></button>'
             f'<div class="inst-pop" id="inst-{a}" popover role="dialog" aria-labelledby="inst-{a}-t">'
             f'<button class="inst-pop__fechar" type="button" popovertarget="inst-{a}" popovertargetaction="hide">'
             f'<span aria-hidden="true">×</span><span class="sr-only">Fechar</span></button>'
-            f'<img class="inst-pop__logo" src="assets/img/instituicoes/{a}.webp" width="140" height="140" alt="" loading="lazy">'
+            f'<img class="inst-pop__logo" src="assets/img/instituicoes/{a}.webp?v={versao(f'assets/img/instituicoes/{a}.webp')}" width="140" height="140" alt="" loading="lazy">'
             f'<h3 id="inst-{a}-t">{n}</h3><span class="inst-pop__filete" aria-hidden="true"></span>'
             f'<p>{quem}</p>'
             f'<h4>Na integração do CIOSP</h4><p>{integra}</p>'
